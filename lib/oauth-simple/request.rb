@@ -94,7 +94,7 @@ class OAuthRequest
     }
     defaults.merge(options)
     instance = new(:http_url => url, :parameters => defaults)
-    instance.set_parameter('oauth_token', token.key)
+    instance.set_parameter('oauth_token', token.key) if token
     instance.consumer = consumer
     return instance
   end
@@ -102,6 +102,7 @@ class OAuthRequest
   def self.generate_timestamp
     return Time.now.to_i.to_s
   end
+  
   def self.generate_nonce(size=32)
     bytes = OpenSSL::Random.random_bytes(size)
     [bytes].pack('m').gsub(/\W/,'')

@@ -4,38 +4,35 @@ require 'open-uri'
 require 'rubygems'
 require 'sinatra'
 
+SITE = 'http://localhost:3001'
+KEY = '5rru7RgENgeL5uIWMETEA'
+SECRET = 'qj6GVeKFssJxmxT77sSasC4mXJebl2EvWNSEnVoI'
+VERIFICATION_URL = 'http://localhost:3001/users.json'
+
+# SITE = 'http://twitter.com'
+# KEY = 'xqDiwpfBhfyukbVI3IZTQ'
+# SECRET = '3XcmO2Dg1uaXVZmSyI0FXE0dz7C5cw0OL69rz62QUI'
+# VERIFICATION_URL = 'https://twitter.com/statuses/friends.json'
+
 get '/' do
   erb :index
 end
 
 get '/goto_oauth' do
-  $consumer = OAuthConsumer.new('KGpBROtLfxyKHFh9iMtTA','zENnjjk1e1EQODcrE8zRqK3Kty2XUqeqbNHoWEWCFDo')
-  request = OAuthRequest.new(:http_url => 'http://localhost:3001/oauth/request_token')
-  request.consumer = $consumer
-  request.sign_request(OauthSignatureMethodHMAC_SHA1)
-  res = open('http://localhost:3001/oauth/request_token', 'r', request.to_header).read
-  $request_token = OAuthToken.from_string(res)
-  debug_output = ""
-  debug_output << "Got request token: #{$request_token}"
-  second_request = OAuthRequest.from_consumer_and_token($consumer, $request_token, 'http://localhost:3001/oauth/authorize', {})
-  debug_output << "Authorization url is #{second_request.to_url}"
-  redirect second_request.to_url
+  $consumer = OAuthConsumer.new(KEY, SECRET, :site => SITE, :scheme => :GET)
+  $request_token = $consumer.get_request_token
+  redirect $request_token.authorize_url
 end
 
-get '/returning_from_oauth' do
-  request = OAuthRequest.from_consumer_and_token($consumer, $request_token, 'http://localhost:3001/oauth/access_token')
-  request.consumer = $consumer
-  request.sign_request(OauthSignatureMethodHMAC_SHA1, $request_token)
-  response = open(request.get_normalized_http_url, 'r', request.to_header).read
-
-  access_token = OAuthToken.from_string(response)
-
-  "Yeah. Got access token: #{access_token}"
+get '/oauth_return' do
+  access_token = $request_token.get_access_token
   
-  fourth_request = OAuthRequest.from_consumer_and_token($consumer, access_token, 'http://localhost:3001/merge_requests.xml')
+  # Meh, this is as far as I got
+
+  fourth_request = OAuthRequest.from_consumer_and_token($consumer, access_token, VERIFICATION_URL)
   fourth_request.consumer = $consumer
   fourth_request.sign_request(OauthSignatureMethodHMAC_SHA1, access_token)
   
-  response = open(fourth_request.get_normalized_http_url, 'r', fourth_request.to_header).read
-  response
+  @json = open(fourth_request.get_normalized_http_url, 'r', fourth_request.to_header).read
+  erb :result
 end

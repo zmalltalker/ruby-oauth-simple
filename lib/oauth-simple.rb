@@ -6,6 +6,7 @@ $:.unshift(File.dirname(__FILE__))
 require 'oauth-simple/common'
 require 'oauth-simple/consumer'
 require 'oauth-simple/request'
+require 'oauth-simple/http_client'
 require 'oauth-simple/token'
 require 'oauth-simple/signature_method'
 require 'oauth-simple/signature_method_hmac_sha1'
