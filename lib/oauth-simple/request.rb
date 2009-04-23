@@ -63,7 +63,7 @@ module OAuthSimple
       pairs  << "realm=#{realm}" 
       @parameters.sort.each do |k, v|
         if k =~ /^oauth_/
-          pairs << "#{k}=#{CGI.escape(v)}"
+          pairs << "#{k}=\"#{CGI.escape(v)}\""
         end
       end
       auth_header << pairs.join(", ")

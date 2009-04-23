@@ -22,10 +22,26 @@
 
 # A simplistic client that performs HTTP operations
 require 'open-uri'
+require 'net/http'
 module OAuthSimple
   class HttpClient
     def get(url, headers)
-      open(url, 'r', headers).read
+      uri = URI.parse(url)
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Get.new(uri.path, headers)
+      response = http.request(request)
+      case response
+      when Net::HTTPSuccess
+        result = response.body
+      else
+        raise "HTTP error: #{response.body}"
+      end
+    end
+    
+    def post(url, parameters)
+      uri = URI.parse(url)
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Post.new(uri.path, headers)
     end
   end
 end
