@@ -32,14 +32,14 @@ class RequestTest < Test::Unit::TestCase
   def test_sign_request_without_token
     @request = OAuthSimple::Request.from_consumer_and_token(@consumer, nil, 'http://oauth.example.com/do_oauth',
       'foo' => 'bar')
-    @request.sign_request(OAuthSimple::SignatureMethodHMAC_SHA1, nil)
+    @request.sign_request(OAuthSimple::SignatureMethodHMACSHA1, nil)
     assert_equal "w3FuykT3EmdgHZcSXINi8OhlG40=", @request.get_parameter("oauth_signature")
   end
   
   def test_generate_and_sign_access_token
     access_token = OAuthSimple::Token.from_string("oauth_token=foo&oauth_token_secret=bar")
     @request = OAuthSimple::Request.from_consumer_and_token(@consumer, nil, 'http://oauth.example.com/do_oauth')
-    @request.sign_request(OAuthSimple::SignatureMethodHMAC_SHA1, access_token)
+    @request.sign_request(OAuthSimple::SignatureMethodHMACSHA1, access_token)
     assert_equal 'http://oauth.example.com/do_oauth?oauth_consumer_key=key&oauth_nonce=nonce&oauth_signature=loiAqloHcoLZAuvhxlt2nrOgXrM%3D&oauth_signature_method=HMAC-SHA1&oauth_timestamp=12345&oauth_version=1.0', @request.to_url
   end
   

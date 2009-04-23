@@ -34,7 +34,8 @@ module OAuthSimple
         :scheme             => :header,
         :authorize_path     => '/oauth/authorize',
         :access_token_path  => '/oauth/access_token',
-        :request_token_path => '/oauth/request_token'
+        :request_token_path => '/oauth/request_token',
+        :signature_method   => 'HMAC-SHA1'
       }
     end
   
@@ -61,10 +62,14 @@ module OAuthSimple
     def http
       HttpClient.new
     end
+    
+    def signature_method
+      SignatureMethod.by_name(@options[:signature_method])
+    end
   
     def get_request_token
       r = Request.from_consumer_and_token(self, nil, request_token_url)
-      r.sign_request(SignatureMethodHMAC_SHA1)
+      r.sign_request(signature_method)
       response = http.get(request_token_url, r.to_header)
       result = Token.from_string(response)
       result.consumer = self

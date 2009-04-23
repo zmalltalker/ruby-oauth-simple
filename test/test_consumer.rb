@@ -12,6 +12,11 @@ class ConsumerTest < Test::Unit::TestCase
     assert_equal 'secret', consumer.secret
   end
   
+  def test_default_signature_method
+    @consumer = OAuthSimple::Consumer.new('key', 'secret')
+    assert_equal OAuthSimple::SignatureMethodHMACSHA1, @consumer.signature_method
+  end
+  
   def test_setup_with_options
     assert_equal 'http://localhost:3001/', @consumer.site
     assert_equal :header, @consumer.scheme

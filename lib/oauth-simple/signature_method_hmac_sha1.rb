@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 module OAuthSimple
-  class SignatureMethodHMAC_SHA1 < SignatureMethod
+  class SignatureMethodHMACSHA1 < SignatureMethod
     def self.oauth_name
       "HMAC-SHA1"
     end

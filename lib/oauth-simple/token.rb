@@ -50,7 +50,7 @@ module OAuthSimple
     def get_access_token
       request = Request.from_consumer_and_token(@consumer, self, @consumer.access_token_url)
       request.consumer = @consumer
-      request.sign_request(SignatureMethodHMAC_SHA1, self)
+      request.sign_request(@consumer.signature_method, self)
       response = open(request.get_normalized_http_url, 'r', request.to_header).read
       return Token.from_string(response)
     end

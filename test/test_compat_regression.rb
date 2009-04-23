@@ -75,7 +75,7 @@ class CompatRegressionTest < Test::Unit::TestCase
     @consumer = OAuthSimple::Consumer.new('key', 'secret')
     @token = OAuthSimple::Token.new('foo', 'bar')
     @request = OAuthSimple::Request.from_consumer_and_token(@consumer, @token, 'http://oauth.example.com/do_oauth')
-    @request.sign_request(OAuthSimple::SignatureMethodHMAC_SHA1, @token)
+    @request.sign_request(@consumer.signature_method, @token)
     assert_equal 'http://oauth.example.com/do_oauth?oauth_consumer_key=key&oauth_nonce=nonce&oauth_signature=WZIO8HdSZy%2B6PKEkgrB8ZyqykT8%3D&oauth_signature_method=HMAC-SHA1&oauth_timestamp=12345&oauth_token=foo&oauth_version=1.0', @request.to_url
   end
 
@@ -86,7 +86,7 @@ class CompatRegressionTest < Test::Unit::TestCase
     @consumer = OAuthSimple::Consumer.new('key', 'secret')
     @token = OAuthSimple::Token.new('foo', 'bar')
     @request = OAuthSimple::Request.from_consumer_and_token(@consumer, @token, 'http://oauth.example.com/do_oauth', {'foo' => 'bar'})
-    @request.sign_request(OAuthSimple::SignatureMethodHMAC_SHA1, @token)
+    @request.sign_request(@consumer.signature_method, @token)
     assert_equal 'http://oauth.example.com/do_oauth?foo=bar&oauth_consumer_key=key&oauth_nonce=nonce&oauth_signature=xNxW8DDE4TXvTg9cXul7mSfDKeQ%3D&oauth_signature_method=HMAC-SHA1&oauth_timestamp=12345&oauth_token=foo&oauth_version=1.0', @request.to_url
   end
   

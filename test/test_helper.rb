@@ -4,7 +4,7 @@ require 'mocha'
 module Test
   module Unit
     class TestCase
-      PASSTHROUGH_EXCEPTIONS = []
+      PASSTHROUGH_EXCEPTIONS = [] unless defined?(PASSTHROUGH_EXCEPTIONS)
     end
   end
 end

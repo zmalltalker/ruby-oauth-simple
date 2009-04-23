@@ -21,5 +21,10 @@
 # THE SOFTWARE.
 module OAuthSimple
   class SignatureMethod
+    def self.by_name(name)
+      {
+        'HMAC-SHA1'   => SignatureMethodHMACSHA1
+      }[name.to_s]
+    end
   end
 end
