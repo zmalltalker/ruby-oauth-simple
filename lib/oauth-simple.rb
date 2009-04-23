@@ -21,9 +21,15 @@
 # THE SOFTWARE.
 require 'cgi'
 require 'uri'
-require 'digest/hmac'
 require 'openssl'
 $:.unshift(File.dirname(__FILE__))
+if RUBY_VERSION <= "1.9"
+  require 'rubygems'
+  require 'hmac'
+  require 'hmac-sha1'
+else
+  require 'digest/hmac'
+end
 require 'oauth-simple/consumer'
 require 'oauth-simple/request'
 require 'oauth-simple/http_client'

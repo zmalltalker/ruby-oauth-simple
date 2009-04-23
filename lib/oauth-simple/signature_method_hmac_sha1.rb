@@ -39,8 +39,16 @@ module OAuthSimple
   
     def self.build_signature(request, consumer, token)
       key, raw = build_signature_base_string(request, consumer, token)
-      hashed = Digest::HMAC.new(key, Digest::SHA1).digest(raw)
+      hashed = calculate_digest(key, raw)
       return [hashed].pack('m').chomp.gsub(/\n/, '')
+    end
+    
+    def self.calculate_digest(key, data)
+      if RUBY_VERSION >= "1.9"
+        Digest::HMAC.new(key, Digest::SHA1).digest(data)
+      else
+        ::HMAC::SHA1.digest(key, data)
+      end
     end
   end
 end
