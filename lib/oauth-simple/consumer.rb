@@ -1,3 +1,24 @@
+# The MIT License
+# 
+# Copyright (c) 2009 Marius Mathiesen <marius.mathiesen@gmail.com>
+# 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+# 
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
 class OAuthConsumer
   attr_reader :key, :secret
   def initialize(key, secret, options = {})
@@ -36,20 +57,13 @@ class OAuthConsumer
     @options[:request_token_path]
   end
   
-  def request
-    result = OAuthRequest.new(:http_url => request_token_url)
-    result.consumer = self
-    result
-  end
-
   def http
     OAuthHttpClient.new
   end
   
   def get_request_token
-    r = request
+    r = OAuthRequest.from_consumer_and_token(self, nil, request_token_url)
     r.sign_request(OauthSignatureMethodHMAC_SHA1)
-#    raise r.to_header.inspect
     response = http.get(request_token_url, r.to_header)
     result = OAuthToken.from_string(response)
     result.consumer = self
@@ -57,14 +71,14 @@ class OAuthConsumer
   end
   
   def request_token_url
-    File.join(site, request_token_path)
+    @options[:request_token_url] || File.join(site, request_token_path)
   end
   
   def access_token_url
-    File.join(site, access_token_path)
+    @options[:access_token_url] || File.join(site, access_token_path)
   end
   
   def authorize_url
-    File.join(site, authorize_path)
+    @options[:authorize_url] || File.join(site, authorize_path)
   end
 end
