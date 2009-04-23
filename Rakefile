@@ -7,6 +7,10 @@ Rake::TestTask.new do |t|
   t.verbose = true
 end
 
+task :clobber_package do
+  `rm -fr pkg/*`
+end
+
 Hoe.new('oauth-simple', OAuthSimple::VERSION) do |h|
   h.author = ['Marius Mathiesen']
   h.email = 'marius.mathiesen@gmail.com'
