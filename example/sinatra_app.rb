@@ -16,7 +16,7 @@ get '/' do
 end
 
 get '/goto_oauth' do
-  $consumer = OAuthConsumer.new(KEY, SECRET, 
+  $consumer = OAuthSimple::Consumer.new(KEY, SECRET, 
     :site => SITE, 
     :scheme => :GET)
   $request_token = $consumer.get_request_token
@@ -28,9 +28,9 @@ get '/oauth_return' do
   
   # Meh, this is as far as I got
 
-  fourth_request = OAuthRequest.from_consumer_and_token($consumer, access_token, VERIFICATION_URL)
+  fourth_request = OAuthSimple::Request.from_consumer_and_token($consumer, access_token, VERIFICATION_URL)
   fourth_request.consumer = $consumer
-  fourth_request.sign_request(OauthSignatureMethodHMAC_SHA1, access_token)
+  fourth_request.sign_request(OAuthSimple::SignatureMethodHMAC_SHA1, access_token)
   
   @result = open(fourth_request.get_normalized_http_url, 'r', fourth_request.to_header).read
   erb :result
