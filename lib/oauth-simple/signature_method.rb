@@ -23,7 +23,8 @@ module OAuthSimple
   class SignatureMethod
     def self.by_name(name)
       {
-        'HMAC-SHA1'   => SignatureMethodHMACSHA1
+        'HMAC-SHA1'   => SignatureMethodHMACSHA1,
+        'PLAINTEXT'    => SignatureMethodPlaintext
       }[name.to_s]
     end
   end

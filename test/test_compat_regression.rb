@@ -89,5 +89,17 @@ class CompatRegressionTest < Test::Unit::TestCase
     @request.sign_request(@consumer.signature_method, @token)
     assert_equal 'http://oauth.example.com/do_oauth?foo=bar&oauth_consumer_key=key&oauth_nonce=nonce&oauth_signature=xNxW8DDE4TXvTg9cXul7mSfDKeQ%3D&oauth_signature_method=HMAC-SHA1&oauth_timestamp=12345&oauth_token=foo&oauth_version=1.0', @request.to_url
   end
+
+  # http://developer.netflix.com/resources/OAuthTest
+  def test_signature_generation_plaintext
+    OAuthSimple::Request.stubs(:generate_nonce).returns("nonce")
+    OAuthSimple::Request.stubs(:generate_timestamp).returns("12345")    
+    @consumer = OAuthSimple::Consumer.new('key', 'secret', :signature_method => 'PLAINTEXT')
+    @token = OAuthSimple::Token.new('foo', 'bar')
+    @request = OAuthSimple::Request.from_consumer_and_token(@consumer, @token, 'http://oauth.example.com/do_oauth', {'foo' => 'bar'})
+    @request.sign_request(@consumer.signature_method, @token)
+    assert_equal 'secret&bar', @request.get_parameter('oauth_signature')
+  end
+  
   
 end

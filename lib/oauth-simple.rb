@@ -30,12 +30,13 @@ if RUBY_VERSION <= "1.9"
 else
   require 'digest/hmac'
 end
+
 require 'oauth-simple/consumer'
 require 'oauth-simple/request'
 require 'oauth-simple/http_client'
 require 'oauth-simple/token'
 require 'oauth-simple/signature_method'
 require 'oauth-simple/signature_method_hmac_sha1'
-
+require 'oauth-simple/signature_method_plaintext'
 
 
