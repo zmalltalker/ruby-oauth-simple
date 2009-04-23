@@ -1,13 +1,13 @@
 require File.join(File.dirname(__FILE__), 'test_helper')
 class ConsumerTest < Test::Unit::TestCase
   def setup
-    OAuthRequest.stubs(:generate_nonce).returns("nonce")
-    OAuthRequest.stubs(:generate_timestamp).returns("12345")    
-    @consumer = OAuthConsumer.new('key', 'secret', :site => 'http://localhost:3001/', :scheme => :header)
+    OAuthSimple::Request.stubs(:generate_nonce).returns("nonce")
+    OAuthSimple::Request.stubs(:generate_timestamp).returns("12345")    
+    @consumer = OAuthSimple::Consumer.new('key', 'secret', :site => 'http://localhost:3001/', :scheme => :header)
   end
   
   def test_basic_setup
-    consumer = OAuthConsumer.new('key', 'secret')
+    consumer = OAuthSimple::Consumer.new('key', 'secret')
     assert_equal 'key', consumer.key
     assert_equal 'secret', consumer.secret
   end
@@ -18,7 +18,7 @@ class ConsumerTest < Test::Unit::TestCase
   end
   
   def test_customizable_paths
-    consumer = OAuthConsumer.new('key', 'secret', 
+    consumer = OAuthSimple::Consumer.new('key', 'secret', 
       :site => 'http://oauth.example', 
       :request_token_path   => '/oauth/example/req.php',
       :access_token_path    => '/oauth/example/token.php',
@@ -34,6 +34,6 @@ class ConsumerTest < Test::Unit::TestCase
     http_request.expects(:get).with('http://localhost:3001/oauth/request_token', {'Authorization' => 'OAuth realm=, oauth_consumer_key=key, oauth_nonce=nonce, oauth_signature=eff4QrcF%2BzToX7GI4eHYsdc7wfo%3D, oauth_signature_method=HMAC-SHA1, oauth_timestamp=12345, oauth_version=1.0'}).returns('oauth_token=token&oauth_token_secret=top_secret')
     @consumer.stubs(:http).returns(http_request)
     token = @consumer.get_request_token
-    assert_kind_of OAuthToken, token
+    assert_kind_of OAuthSimple::Token, token
   end
 end

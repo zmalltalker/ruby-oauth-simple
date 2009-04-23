@@ -19,66 +19,68 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-class OAuthConsumer
-  attr_reader :key, :secret
-  def initialize(key, secret, options = {})
-    @key = key
-    @secret = secret
-    @options = self.class.default_options.merge(options)
-  end
+module OAuthSimple
+  class Consumer
+    attr_reader :key, :secret
+    def initialize(key, secret, options = {})
+      @key = key
+      @secret = secret
+      @options = self.class.default_options.merge(options)
+    end
   
-  # Default options, can be overridden in the initializer's options hash
-  def self.default_options
-    {
-      :scheme             => :header,
-      :authorize_path     => '/oauth/authorize',
-      :access_token_path  => '/oauth/access_token',
-      :request_token_path => '/oauth/request_token'
-    }
-  end
+    # Default options, can be overridden in the initializer's options hash
+    def self.default_options
+      {
+        :scheme             => :header,
+        :authorize_path     => '/oauth/authorize',
+        :access_token_path  => '/oauth/access_token',
+        :request_token_path => '/oauth/request_token'
+      }
+    end
   
-  def site
-    @options[:site]
-  end
+    def site
+      @options[:site]
+    end
   
-  def scheme
-    @options[:scheme]
-  end
+    def scheme
+      @options[:scheme]
+    end
   
-  def authorize_path
-    @options[:authorize_path]
-  end
+    def authorize_path
+      @options[:authorize_path]
+    end
   
-  def access_token_path
-    @options[:access_token_path]
-  end
+    def access_token_path
+      @options[:access_token_path]
+    end
   
-  def request_token_path
-    @options[:request_token_path]
-  end
+    def request_token_path
+      @options[:request_token_path]
+    end
   
-  def http
-    OAuthHttpClient.new
-  end
+    def http
+      HttpClient.new
+    end
   
-  def get_request_token
-    r = OAuthRequest.from_consumer_and_token(self, nil, request_token_url)
-    r.sign_request(OauthSignatureMethodHMAC_SHA1)
-    response = http.get(request_token_url, r.to_header)
-    result = OAuthToken.from_string(response)
-    result.consumer = self
-    return result
-  end
+    def get_request_token
+      r = Request.from_consumer_and_token(self, nil, request_token_url)
+      r.sign_request(SignatureMethodHMAC_SHA1)
+      response = http.get(request_token_url, r.to_header)
+      result = Token.from_string(response)
+      result.consumer = self
+      return result
+    end
   
-  def request_token_url
-    @options[:request_token_url] || File.join(site, request_token_path)
-  end
+    def request_token_url
+      @options[:request_token_url] || File.join(site, request_token_path)
+    end
   
-  def access_token_url
-    @options[:access_token_url] || File.join(site, access_token_path)
-  end
+    def access_token_url
+      @options[:access_token_url] || File.join(site, access_token_path)
+    end
   
-  def authorize_url
-    @options[:authorize_url] || File.join(site, authorize_path)
+    def authorize_url
+      @options[:authorize_url] || File.join(site, authorize_path)
+    end
   end
 end

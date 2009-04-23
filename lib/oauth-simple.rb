@@ -24,7 +24,6 @@ require 'uri'
 require 'digest/hmac'
 require 'openssl'
 $:.unshift(File.dirname(__FILE__))
-require 'oauth-simple/common'
 require 'oauth-simple/consumer'
 require 'oauth-simple/request'
 require 'oauth-simple/http_client'
