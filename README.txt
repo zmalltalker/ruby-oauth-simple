@@ -1,0 +1,1 @@
+oauth-simple is a simpler OAuth implementation for Ruby, based on the Python version (http://oauth.googlecode.com/svn/code/python/oauth/)

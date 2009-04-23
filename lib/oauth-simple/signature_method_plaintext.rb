@@ -19,25 +19,23 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-require 'cgi'
-require 'uri'
-require 'openssl'
-$:.unshift(File.dirname(__FILE__))
-if RUBY_VERSION <= "1.9"
-  require 'rubygems'
-  require 'hmac'
-  require 'hmac-sha1'
-else
-  require 'digest/hmac'
+module OAuthSimple
+  class SignatureMethodPlaintext < SignatureMethod
+    
+    def self.oauth_name
+      "PLAINTEXT"
+    end
+  
+    def self.build_signature_base_string(request, consumer, token)
+      sig = "#{CGI.escape(consumer.secret)}&"
+      sig << CGI.escape(token.secret) if token
+      [sig, sig]
+    end
+  
+    def self.build_signature(request, consumer, token)
+      key, raw = build_signature_base_string(request, consumer, token)
+      return key
+    end
+    
+  end
 end
-
-require 'oauth-simple/version'
-require 'oauth-simple/consumer'
-require 'oauth-simple/request'
-require 'oauth-simple/http_client'
-require 'oauth-simple/token'
-require 'oauth-simple/signature_method'
-require 'oauth-simple/signature_method_hmac_sha1'
-require 'oauth-simple/signature_method_plaintext'
-
-

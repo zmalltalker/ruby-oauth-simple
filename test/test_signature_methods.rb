@@ -19,25 +19,10 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-require 'cgi'
-require 'uri'
-require 'openssl'
-$:.unshift(File.dirname(__FILE__))
-if RUBY_VERSION <= "1.9"
-  require 'rubygems'
-  require 'hmac'
-  require 'hmac-sha1'
-else
-  require 'digest/hmac'
+require File.join(File.dirname(__FILE__), 'test_helper')
+class SignatureMethodTest < Test::Unit::TestCase
+  def test_class_methods
+    assert_equal OAuthSimple::SignatureMethodHMACSHA1, OAuthSimple::SignatureMethod.by_name('HMAC-SHA1')
+    assert_equal OAuthSimple::SignatureMethodPlaintext, OAuthSimple::SignatureMethod.by_name('PLAINTEXT')
+  end
 end
-
-require 'oauth-simple/version'
-require 'oauth-simple/consumer'
-require 'oauth-simple/request'
-require 'oauth-simple/http_client'
-require 'oauth-simple/token'
-require 'oauth-simple/signature_method'
-require 'oauth-simple/signature_method_hmac_sha1'
-require 'oauth-simple/signature_method_plaintext'
-
-

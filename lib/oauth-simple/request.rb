@@ -53,10 +53,6 @@ module OAuthSimple
       @parameters[k]
     end
   
-    def _get_timestamp_nonce
-      [@parameters[:oauth_timestamp], @parameters[:oauth_nonce]]
-    end
-  
     def get_nonoauth_parameters
       @parameters.reject{|k,v| k =~ /^oauth_.*/}
     end

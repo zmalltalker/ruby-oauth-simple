@@ -1,0 +1,14 @@
+History.txt
+README.txt
+Manifest.txt
+Rakefile
+TODO
+lib/oauth-simple.rb
+lib/oauth-simple/consumer.rb
+lib/oauth-simple/http_client.rb
+lib/oauth-simple/request.rb
+lib/oauth-simple/signature_method.rb
+lib/oauth-simple/signature_method_hmac_sha1.rb
+lib/oauth-simple/signature_method_plaintext.rb
+lib/oauth-simple/token.rb
+lib/oauth-simple/version.rb
