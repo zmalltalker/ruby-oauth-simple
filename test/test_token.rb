@@ -19,6 +19,6 @@ class TokenTest < Test::Unit::TestCase
     request_token = OAuthSimple::Token.from_string('oauth_token=key&oauth_token_secret=secret')
     request_token.consumer = consumer
     result = request_token.authorize_url
-    assert_equal 'http://oauth.local/oauth/authorize?oauth_consumer_key=key&oauth_nonce=nonce&oauth_timestamp=12345&oauth_token=key&oauth_version=1.0', result
+    assert_equal 'http://oauth.local/oauth/authorize?oauth_token=key', result
   end
 end

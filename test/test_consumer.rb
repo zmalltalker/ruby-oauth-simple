@@ -36,7 +36,7 @@ class ConsumerTest < Test::Unit::TestCase
   
   def test_aquire_request_token
     http_request = mock('HTTP request')
-    http_request.expects(:get).with('http://localhost:3001/oauth/request_token', {'Authorization' => 'OAuth realm=, oauth_consumer_key=key, oauth_nonce=nonce, oauth_signature=eff4QrcF%2BzToX7GI4eHYsdc7wfo%3D, oauth_signature_method=HMAC-SHA1, oauth_timestamp=12345, oauth_version=1.0'}).returns('oauth_token=token&oauth_token_secret=top_secret')
+    http_request.expects(:get).with('http://localhost:3001/oauth/request_token', {'Authorization' => 'OAuth realm=,oauth_consumer_key="key",oauth_nonce="nonce",oauth_signature="eff4QrcF%2BzToX7GI4eHYsdc7wfo%3D",oauth_signature_method="HMAC-SHA1",oauth_timestamp="12345",oauth_version="1.0"'}).returns('oauth_token=token&oauth_token_secret=top_secret')
     @consumer.stubs(:http).returns(http_request)
     token = @consumer.get_request_token
     assert_kind_of OAuthSimple::Token, token

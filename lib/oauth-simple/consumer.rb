@@ -67,8 +67,8 @@ module OAuthSimple
       SignatureMethod.by_name(@options[:signature_method])
     end
   
-    def get_request_token
-      r = Request.from_consumer_and_token(self, nil, request_token_url)
+    def get_request_token(additional_parameters = {})
+      r = Request.from_consumer_and_token(self, nil, request_token_url, additional_parameters)
       r.sign_request(signature_method)
       response = http.get(request_token_url, r.to_header)
       result = Token.from_string(response)

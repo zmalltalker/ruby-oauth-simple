@@ -43,8 +43,9 @@ module OAuthSimple
     end
   
     def authorize_url
-      req = Request.from_consumer_and_token(@consumer, self, @consumer.authorize_url, {})
-      return req.to_url
+      @consumer.authorize_url + "?oauth_token=" + self.key
+      # req = Request.from_consumer_and_token(@consumer, self, @consumer.authorize_url, {})
+      # return req.to_url
     end
   
     def get_access_token

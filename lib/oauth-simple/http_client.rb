@@ -23,12 +23,17 @@
 # A simplistic client that performs HTTP operations
 require 'open-uri'
 require 'net/http'
+require 'net/https'
 module OAuthSimple
   class HttpClient
     def get(url, headers)
       uri = URI.parse(url)
       http = Net::HTTP.new(uri.host, uri.port)
+      if uri.scheme == 'https'
+        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
       request = Net::HTTP::Get.new(uri.path, headers)
+
       response = http.request(request)
       case response
       when Net::HTTPSuccess

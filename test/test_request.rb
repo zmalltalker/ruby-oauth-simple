@@ -14,7 +14,7 @@ class RequestTest < Test::Unit::TestCase
   end
   
   def test_oauth_headers
-    assert_equal({'Authorization' => "OAuth realm=, oauth_auth=auth, oauth_bar=baz"}, @request.to_header)
+    assert_equal({'Authorization' => "OAuth realm=,oauth_auth=\"auth\",oauth_bar=\"baz\""}, @request.to_header)
   end
   
   def test_postdata

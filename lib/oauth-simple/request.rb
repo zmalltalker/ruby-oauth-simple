@@ -66,7 +66,7 @@ module OAuthSimple
           pairs << "#{k}=\"#{CGI.escape(v)}\""
         end
       end
-      auth_header << pairs.join(", ")
+      auth_header << pairs.join(",")
       return {"Authorization" => auth_header}
     end
 
@@ -104,7 +104,7 @@ module OAuthSimple
     end
   
     def get_normalized_parameters
-      @parameters.sort.map do |k, values|
+      @parameters.reject{|k,v|k=='oauth_signature'}.sort.map do |k, values|
         if values.is_a?(Array)
           # multiple values were provided for a single key
           values.sort.collect do |v|
