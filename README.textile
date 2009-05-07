@@ -1,0 +1,58 @@
+h1. A simple, yet powerful, Ruby OAuth library
+
+This library provides OAuth functionality from Ruby. It is based on the "Python OAuth library":http://oauth.googlecode.com/svn/code/python/oauth/ - but is intended to be more or less API compatible with the "Ruby OAuth GEM":http://oauth.rubyforge.org/
+
+
+h2. Differences from the oauth gem
+
+I have made a few contributions to the Ruby OAuth gem, including support for Ruby 1.9. When working with the library, I found it a little too abstracted from the OAuth protocol, which is very simple. While the Ruby OAuth gem provides a very clean API I found it hard to extend the code, as most of the OAuth protocol details are scattered around the codebase. This said, the Ruby OAuth gem is a very nice piece of code, but the coding style is not quite to my liking.
+
+The Python OAuth library, on the other hand, lives in a single file, defining a few classes:
+
+* a Request class
+* a Token class
+* a few Signature classes
+
+... and that's all OAuth really is. So I ported the Python code to Ruby, learning the OAuth spec in the process. Then I started (but didn't finish yet) building wrappers around these basic concepts to provide the same API that the Ruby OAuth gem provides. If you're anything like me, you'll enjoy knowing what actually happens behind the scenes, when you need to use OAuth for not so common use cases.
+
+h2. Protocol specs
+
+"The OAuth protocol spec":http://oauth.net/core/1.0/ covers how you build the parameters needed to connect to an OAuth service:
+
+* Obtaining a Request Token
+* Generating a URL for authorization from a Request Token
+* Obtaining an Access Token after the user has authorized your access to his data
+
+On a very high level, this happens as follows:
+
+* Your application, the Consumer, shares a key (public) and a secret (private) with an OAuth provider site
+* Using this key and secret, you send a HTTP request to the provider, asking for an access token. This is done by generating a timestamp and a nonce in your code (along with your key and any other parameters), signing this with the secret, and providing this either as a HTTP header, in the query string or in the postbody of the HTTP request. The OAuth provider will respond with a string containing a second key and secret that represent a Request Token
+* Using this token, you can build a URL you make sure your user visits in order to authorize your access to his data on the provider site
+* Once this is done, you send another signed HTTP request (like above), to obatain an Access Token (again taken from the response body from the provider)
+* This access token can be included in either a HTTP header, the query string or the postbody of subsequent requests to the provider, to access the user's data.
+
+That's really how OAuth works. And, more importantly, that's the way this library works too. The source code includes an examples directory with some samples of how to use the library.
+
+h3. Verifying that it works
+
+There is "a web browser interface for testing OAuth requests and signatures at Googlecode":http://oauth.googlecode.com/svn/code/javascript/example/signature.html that generates signatures based on parameters you provide. Included in this library there is a small "Sinatra":http://sinatra.rubyforge.org/ application that provides the same, but based on the logic in the library itself. I built it mainly to ensure the library generates the correct signatures, but it's also a fun way to learn how OAuth itself works. Just run the <code>example/acceptance_tester.rb</code> script and point your web browser to "http://localhost:4567/":http://localhost:4567/ to get going.
+
+h2. Installing
+
+There is a gem on Rubyforge, installed the usual way:
+
+  sudo gem install oauth-simple
+
+h2. Getting the source
+
+If you feel so inclined, get the source from Github:
+
+  git clone git://github.com/zmalltalker/ruby-oauth-simple.git
+  
+Have a look at the tests and get hacking. 
+
+h2. TODO
+
+* getting an Access Token from a Request Token 
+* giving some love to the net_http client, maybe provide an extensible interface for other approaches (async HTTP, for instance)
+* complete the Ruby OAuth API for easy switching
