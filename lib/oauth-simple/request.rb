@@ -44,6 +44,11 @@ module OAuthSimple
       return instance
     end
   
+    # For testing with a known timestamp and nonce
+    def override_timestamp_and_nonce(timestamp, nonce)
+      set_parameter('oauth_timestamp', timestamp)
+      set_parameter('oauth_nonce', nonce)
+    end
   
     def set_parameter(k, v)
       @parameters[k] = v

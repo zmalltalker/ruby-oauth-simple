@@ -1,3 +1,10 @@
+=== 0.0.2 / 2009-04-27:
+
+  - Adding support for additional parameters when aquiring a request token
+  - Give the http client preliminary support for SSL
+  - Skip the space between elements in auth header in request
+  - Skip anything but the oauth token when generating a authorization url (the only required parameter according to 6.2.
+
 === 0.0.1 / 2009-04-23:
 
 * First Gem build
